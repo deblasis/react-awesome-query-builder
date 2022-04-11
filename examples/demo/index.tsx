@@ -10,7 +10,7 @@ import loadedInitLogic from "./init_logic";
 //let loadedInitLogic;
 import Immutable from "immutable";
 import clone from "clone";
-import { Alert, Button, Grid, Popover } from "@mui/material";
+import { Alert, Button, Grid, Paper, Popover } from "@mui/material";
 
 const stringify = JSON.stringify;
 const {elasticSearchFormat, queryBuilderFormat, jsonLogicFormat, queryString, _mongodbFormat, _sqlFormat, _spelFormat, getTree, checkTree, loadTree, uuid, loadFromJsonLogic, loadFromSpel, isValidTree} = Utils;
@@ -122,7 +122,6 @@ const DemoQueryBuilder: React.FC = () => {
           const initLogic: JsonLogicTree = inputJsonLogic && Object.keys(inputJsonLogic).length > 0 ? inputJsonLogic as JsonLogicTree : undefined;
           const initTree: ImmutableTree = checkTree(loadFromJsonLogic(initLogic, {...loadedConfig, requirements}), loadedConfig); // <- this will work same
 
-          console.log("initTree", initTree);
           // Trick to hot-load new config when you edit `config.tsx`
           const updateEvent = new CustomEvent<CustomEventDetail>("update", { detail: {
             config: loadedConfig,
@@ -287,10 +286,12 @@ const DemoQueryBuilder: React.FC = () => {
             {!!logic &&<Button variant="outlined" onClick={() => handleCopyClick(stringify(logic, undefined, 2))}>Copy to clipboard</Button>}
             <Popover
               open={isCopied}
+              anchorPosition={{ top: 0, left: 0 }}
               anchorOrigin={{
                 vertical: "top",
                 horizontal: "right",
               }}
+              anchorReference="anchorPosition"
             >
               <Alert severity="success">RequirementExpression copied!</Alert>
             </Popover>
@@ -298,7 +299,7 @@ const DemoQueryBuilder: React.FC = () => {
         </Grid>
         {isValid ? null : <pre style={preErrorStyle}>{"Tree has errors"}</pre>}
         <br />
-        {!!logic && <div className="requirement-expression">
+        {!!logic && <Paper elevation={6} className="requirement-expression">
           <span className="title">RequirementExpression</span>
           { logicErrors.length > 0
             && <pre style={preErrorStyle}>
@@ -311,7 +312,7 @@ const DemoQueryBuilder: React.FC = () => {
               {stringify(logic, undefined, 2)}
             </pre><br /></>
           }
-        </div>}
+        </Paper>}
         {/* <hr/>
         <div>
         Tree:

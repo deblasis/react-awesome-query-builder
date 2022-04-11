@@ -241,8 +241,6 @@ const formatReq = (item, config, meta, parentField = null) => {
     return undefined;
 
   const formattedField = formatField(meta, config, field, parentField);
-  console.log(formattedField);
-  console.log(formattedValue);
   return formatReqLogic(config, properties, formattedField, formattedValue, "req", operatorOptions, fieldDefinition, isRev);
 };
 
