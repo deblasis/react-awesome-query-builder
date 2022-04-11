@@ -28,7 +28,7 @@ class SwitchGroup extends BasicGroup {
   }
 
   childrenClassName = () => "switch_group--children";
-  
+
   renderFooterWrapper = () => null;
   hasDefaultCase = () => {
     return this.props.children1.size && this.props.children1.filter(c => c.get("children1") == null).size > 0;
@@ -42,6 +42,9 @@ class SwitchGroup extends BasicGroup {
     return true;
   }
   canAddRule() {
+    return false;
+  }
+  canAddReq() {
     return false;
   }
 
@@ -80,7 +83,7 @@ class SwitchGroup extends BasicGroup {
   renderHeaderWrapper() {
     return (
       <div key="group-header" className={classNames(
-        "group--header", 
+        "group--header",
         this.isOneChild() ? "one--child" : "",
         this.showDragIcon() ? "with--drag" : "hide--drag",
         this.showConjs() && (!this.isOneChild() || this.showNot()) ? "with--conjs" : "hide--conjs"

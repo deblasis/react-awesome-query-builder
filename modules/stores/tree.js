@@ -1,11 +1,11 @@
 
 import Immutable from "immutable";
 import {
-  expandTreePath, expandTreeSubpath, getItemByPath, fixPathsInTree, 
+  expandTreePath, expandTreeSubpath, getItemByPath, fixPathsInTree,
   getTotalRulesCountInTree, fixEmptyGroupsInTree, isEmptyTree, hasChildren, removeIsLockedInTree
 } from "../utils/treeUtils";
 import {
-  defaultRuleProperties, defaultGroupProperties, defaultOperator, 
+  defaultRuleProperties, defaultGroupProperties, defaultOperator,
   defaultOperatorOptions, defaultRoot, defaultItemProperties
 } from "../utils/defaultUtils";
 import * as constants from "../constants";
@@ -41,13 +41,13 @@ const addNewGroup = (state, path, type, groupUuid, properties, config, children 
 
       // Add one empty rule into new group
       if (canAddNewRule) {
-        state = addItem(state, groupPath, "rule", uuid(), defaultRuleProperties(config), config);
+        state = addItem(state, groupPath, "req", uuid(), defaultRuleProperties(config).merge({field:"reqId" , operator: "select_equals", valueSrc: ["value"]}), config);
       }
     }
 
     state = fixPathsInTree(state);
   }
-  
+
   return state;
 };
 
@@ -65,10 +65,10 @@ const removeGroup = (state, path, config) => {
   if (isEmptyParentGroup && !canLeaveEmptyGroup) {
     // check ancestors for emptiness (and delete 'em if empty)
     state = fixEmptyGroupsInTree(state);
-    
+
     if (isEmptyTree(state) && !canLeaveEmptyGroup) {
       // if whole query is empty, add one empty rule to root
-      state = addItem(state, new Immutable.List(), "rule", uuid(), defaultRuleProperties(config), config);
+      state = addItem(state, new Immutable.List(), "req", uuid(), defaultRuleProperties(config).merge({field:"reqId" , operator: "select_equals", valueSrc: ["value"]}), config);
     }
   }
   state = fixPathsInTree(state);
@@ -92,25 +92,24 @@ const removeRule = (state, path, config) => {
   const parentFieldConfig = parentField ? getFieldConfig(config, parentField) : null;
   const parentOperatorConfig = parentOperator ? getOperatorConfig(config, parentOperator, parentField) : null;
   const hasGroupCountRule = parentField && parentOperator && parentOperatorConfig.cardinality != 0; // && parentValue != undefined;
-  
+
   const isParentRuleGroup = parent.get("type") == "rule_group";
   const isEmptyParentGroup = !hasChildren(state, parentPath);
-  const canLeaveEmpty = isParentRuleGroup 
+  const canLeaveEmpty = isParentRuleGroup
     ? hasGroupCountRule && parentFieldConfig.initialEmptyWhere
     : canLeaveEmptyGroup;
-  
+
   if (isEmptyParentGroup && !canLeaveEmpty) {
     if (isParentRuleGroup) {
       // deleted last rule from rule_group, so delete whole rule_group
       state = state.deleteIn(expandTreePath(parentPath));
     }
-
     // check ancestors for emptiness (and delete 'em if empty)
     state = fixEmptyGroupsInTree(state);
 
     if (isEmptyTree(state) && !canLeaveEmptyGroup) {
       // if whole query is empty, add one empty rule to root
-      state = addItem(state, new Immutable.List(), "rule", uuid(), defaultRuleProperties(config), config);
+      state = addItem(state, new Immutable.List(), "req", uuid(), defaultRuleProperties(config).merge({field:"reqId" , operator: "select_equals", valueSrc: ["value"]}), config);
     }
   }
   state = fixPathsInTree(state);
@@ -192,12 +191,14 @@ const addItem = (state, path, type, id, properties, config, children = null) => 
     maxNumber = maxNesting;
   } else if (targetItem?.get("type") == "rule_group") {
     // don't restrict
+  } else if (type == "req") {
+    // don't restrict
   } else {
     currentNumber = isTernary ? getTotalRulesCountInTree(caseGroup) : getTotalRulesCountInTree(state);
     maxNumber = maxNumberOfRules;
   }
   const canAdd = maxNumber && currentNumber ? (currentNumber < maxNumber) : true;
-  
+
   const item = {type, id, properties};
   _addChildren1(config, item, children);
 
@@ -222,6 +223,7 @@ const addItem = (state, path, type, id, properties, config, children = null) => 
     }
     state = fixPathsInTree(state);
   }
+  console.log(state);
   return state;
 };
 
@@ -250,7 +252,7 @@ const moveItem = (state, fromPath, toPath, placement, config) => {
 
   const to = getItemByPath(state, toPath);
   const targetPath = (placement == constants.PLACEMENT_APPEND || placement == constants.PLACEMENT_PREPEND) ? toPath : toPath.pop();
-  const target = (placement == constants.PLACEMENT_APPEND || placement == constants.PLACEMENT_PREPEND) 
+  const target = (placement == constants.PLACEMENT_APPEND || placement == constants.PLACEMENT_PREPEND)
     ? to
     : toPath.size > 1 ? getItemByPath(state, targetPath) : null;
   const targetChildren = target ? target.get("children1") : null;
@@ -259,9 +261,9 @@ const moveItem = (state, fromPath, toPath, placement, config) => {
     return state;
 
   const isSameParent = (source.get("id") == target.get("id"));
-  const isSourceInsideTarget = targetPath.size < sourcePath.size 
+  const isSourceInsideTarget = targetPath.size < sourcePath.size
         && deepEqual(targetPath.toArray(), sourcePath.toArray().slice(0, targetPath.size));
-  const isTargetInsideSource = targetPath.size > sourcePath.size 
+  const isTargetInsideSource = targetPath.size > sourcePath.size
         && deepEqual(sourcePath.toArray(), targetPath.toArray().slice(0, sourcePath.size));
   let sourceSubpathFromTarget = null;
   let targetSubpathFromSource = null;
@@ -286,7 +288,7 @@ const moveItem = (state, fromPath, toPath, placement, config) => {
         if (itemId == to.get("id") && placement == constants.PLACEMENT_BEFORE) {
           r.set(from.get("id"), from);
         }
-                
+
         r.set(itemId, item);
 
         if (itemId == to.get("id") && placement == constants.PLACEMENT_AFTER) {
@@ -335,7 +337,7 @@ const setField = (state, path, newField, config) => {
   const isRuleGroup = newFieldConfig.type == "!group";
   const isRuleGroupExt = isRuleGroup && newFieldConfig.mode == "array";
   const isChangeToAnotherType = wasRuleGroup != isRuleGroup;
-  
+
   const currentOperator = currentProperties.get("operator");
   const currentOperatorOptions = currentProperties.get("operatorOptions");
   const _currentField = currentProperties.get("field");
@@ -396,7 +398,7 @@ const setField = (state, path, newField, config) => {
     if (newFieldConfig.initialEmptyWhere && operatorCardinality == 1) { // just `COUNT(grp) > 1` without `HAVING ..`
       // no childeren
     } else {
-      state = addItem(state, path, "rule", uuid(), defaultRuleProperties(config, newField), config);
+      state = addItem(state, path, "req", uuid(), defaultRuleProperties(config, newField).merge({field:"reqId" , operator: "select_equals", valueSrc: ["value"]}), config);
     }
     state = fixPathsInTree(state);
 
@@ -471,7 +473,7 @@ const setOperator = (state, path, newOperator, config) => {
 
   if (isRuleGroup) {
     if (operatorCardinality == 0 && children.size == 0) {
-      state = addItem(state, path, "rule", uuid(), defaultRuleProperties(config, currentField), config);
+      state = addItem(state, path, "req", uuid(), defaultRuleProperties(config, currentField).merge({field:"reqId" , operator: "select_equals", valueSrc: ["value"]}), config);
     }
   }
 
@@ -505,7 +507,7 @@ const setValue = (state, path, delta, value, valueType, config, asyncListValues,
   const [validateError, fixedValue] = validateValue(
     config, field, field, operator, value, calculatedValueType, valueSrc, asyncListValues, canFix, isEndValue
   );
-    
+
   const isValid = !validateError;
   if (isValid && fixedValue !== value) {
     // eg, get exact value from listValues (not string)
@@ -517,7 +519,7 @@ const setValue = (state, path, delta, value, valueType, config, asyncListValues,
     const w = getWidgetForFieldOp(config, field, operator, valueSrc);
     const fieldWidgetDefinition = getFieldWidgetConfig(config, field, operator, w, valueSrc);
     const valueSrcs = Array.from({length: operatorCardinality}, (_, i) => (state.getIn(expandTreePath(path, "properties", "valueSrc", i + "")) || null));
-        
+
     if (operatorConfig && operatorConfig.validateValues && valueSrcs.filter(vs => vs == "value" || vs == null).length == operatorCardinality) {
       const values = Array.from({length: operatorCardinality}, (_, i) => (i == delta ? value : state.getIn(expandTreePath(path, "properties", "value", i + "")) || null));
       const jsValues = fieldWidgetDefinition && fieldWidgetDefinition.toJS ? values.map(v => fieldWidgetDefinition.toJS(v, fieldWidgetDefinition)) : values;
@@ -526,7 +528,7 @@ const setValue = (state, path, delta, value, valueType, config, asyncListValues,
       state = state.setIn(expandTreePath(path, "properties", "valueError", operatorCardinality), rangeValidateError);
     }
   }
-  
+
   const lastValueArr = state.getIn(expandTreePath(path, "properties", "value"));
   if (!lastValueArr) {
     state = state
@@ -561,7 +563,7 @@ const setValue = (state, path, delta, value, valueType, config, asyncListValues,
     state = state.setIn(expandTreePath(path, "properties", "valueError", delta), validateError);
     isInternalValueChange = false;
   }
-  
+
   return {tree: state, isInternalValueChange};
 };
 
@@ -592,7 +594,7 @@ const setValueSrc = (state, path, delta, srcKey, config) => {
       state = state.setIn(expandTreePath(path, "properties", "valueError", operatorCardinality), null);
     }
   }
-  
+
   // set valueSrc
   if (typeof srcKey === "undefined") {
     state = state.setIn(expandTreePath(path, "properties", "valueSrc", delta + ""), null);
@@ -639,7 +641,7 @@ const checkEmptyGroups = (state, config) => {
 
 
 /**
- * 
+ *
  */
 const calculateValueType = (value, valueSrc, config) => {
   let calculatedValueType = null;
@@ -707,7 +709,7 @@ const getActionMeta = (action, state) => {
 export default (config) => {
   const emptyTree = defaultRoot(config);
   const emptyState = Object.assign({}, {tree: emptyTree}, emptyDrag);
-    
+
   return (state = emptyState, action) => {
     const unset = {__isInternalValueChange: undefined, __lastAction: undefined};
     let set = {};
@@ -740,6 +742,16 @@ export default (config) => {
     }
 
     case constants.REMOVE_RULE: {
+      set.tree = removeRule(state.tree, action.path, action.config);
+      break;
+    }
+
+    case constants.ADD_REQ: {
+      set.tree = addItem(state.tree, action.path, action.ruleType, action.id, action.properties, action.config, action.children);
+      break;
+    }
+
+    case constants.REMOVE_REQ: {
       set.tree = removeRule(state.tree, action.path, action.config);
       break;
     }
@@ -820,7 +832,7 @@ export default (config) => {
     if (actionMeta) {
       set.__lastAction = actionMeta;
     }
-    
+
     return {...state, ...unset, ...set};
   };
 

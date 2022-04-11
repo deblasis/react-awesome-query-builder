@@ -81,6 +81,7 @@ export const settings = {
   addDefaultCaseLabel: "Add default condition",
   defaultCaseLabel: "Default:",
   addRuleLabel: "Add rule",
+  addReqLabel: "Add Requirement",
   addSubRuleLabel: "Add sub rule",
   delGroupLabel: "",
   notLabel: "Not",

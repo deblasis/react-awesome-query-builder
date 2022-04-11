@@ -198,7 +198,7 @@ function validateRule (item, path, itemId, meta, c) {
 
 
 /**
- * 
+ *
  * @param {bool} canFix true is useful for func values to remove bad args
  * @param {bool} isEndValue false if value is in process of editing by user
  * @param {bool} isRawValue false is used only internally from validateFuncValue
@@ -228,7 +228,7 @@ export const validateValue = (config, leftField, field, operator, value, valueTy
       const fn = fieldWidgetDefinition.validateValue;
       if (typeof fn == "function") {
         const args = [
-          fixedValue, 
+          fixedValue,
           fieldSettings,
           operator,
           operatorDefinition
@@ -277,7 +277,7 @@ const validateValueInList = (value, listValues) => {
 };
 
 /**
-* 
+*
 */
 const validateNormalValue = (leftField, field, value, valueSrc, valueType, asyncListValues, config, operator = null, isEndValue = false, canFix = false) => {
   let fixedValue = value;
@@ -314,7 +314,7 @@ const validateNormalValue = (leftField, field, value, valueSrc, valueType, async
 
 
 /**
-* 
+*
 */
 const validateFieldValue = (leftField, field, value, _valueSrc, valueType, asyncListValues, config, operator = null, isEndValue = false, canFix = false) => {
   const {fieldSeparator} = config.settings;
@@ -332,7 +332,7 @@ const validateFieldValue = (leftField, field, value, _valueSrc, valueType, async
 };
 
 /**
-* 
+*
 */
 const validateFuncValue = (leftField, field, value, _valueSrc, valueType, asyncListValues, config, operator = null, isEndValue = false, canFix = false) => {
   let fixedValue = value;

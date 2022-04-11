@@ -57,10 +57,10 @@ export default class Widget extends PureComponent {
     const keysForMeta = [
       "config", "field", "fieldFunc", "fieldArg", "leftField", "operator", "valueSrc", "isFuncArg", "asyncListValues"
     ];
-    const needUpdateMeta = !this.meta 
+    const needUpdateMeta = !this.meta
           || keysForMeta
             .map(k => (
-              nextProps[k] !== prevProps[k] 
+              nextProps[k] !== prevProps[k]
                   //tip: for isFuncArg we need to wrap value in Imm list
                   || k == "isFuncArg" && nextProps["isFuncArg"] && nextProps["value"] !== prevProps["value"])
             )
@@ -88,7 +88,7 @@ export default class Widget extends PureComponent {
   };
 
   getMeta({
-    config, field: simpleField, fieldFunc, fieldArg, operator, valueSrc: valueSrcs, value: values, 
+    config, field: simpleField, fieldFunc, fieldArg, operator, valueSrc: valueSrcs, value: values,
     isForRuleGruop, isCaseValue, isFuncArg, leftField, asyncListValues
   }) {
     const field = isFuncArg ? {func: fieldFunc, arg: fieldArg} : simpleField;
@@ -159,7 +159,7 @@ export default class Widget extends PureComponent {
         setValueHandler
       };
     });
-      
+
     return {
       defaultWidget,
       fieldDefinition,
@@ -181,7 +181,7 @@ export default class Widget extends PureComponent {
     const value = isFuncArg ? iValues : values;
     const field = isFuncArg ? leftField : aField;
     const {valueSrc, valueLabel} = widgets[delta];
- 
+
     const widgetLabel = settings.showLabels
       ? <label className="rule--label">{valueLabel.label}</label>
       : null;
@@ -267,7 +267,7 @@ export default class Widget extends PureComponent {
 
     return [
       sep,
-      sources,
+      //sources,
       widgetCmp,
     ];
   };

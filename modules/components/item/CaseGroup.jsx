@@ -59,13 +59,13 @@ class CaseGroup extends BasicGroup {
   }
 
   childrenClassName = () => "case_group--children";
-  
+
   renderFooterWrapper = () => null;
 
   renderHeaderWrapper() {
     return (
       <div key="group-header" className={classNames(
-        "group--header", 
+        "group--header",
         this.isOneChild() ? "one--child" : "",
         this.showDragIcon() ? "with--drag" : "hide--drag",
         this.showConjs() && (!this.isOneChild() || this.showNot()) ? "with--conjs" : "hide--conjs"
@@ -128,6 +128,12 @@ class CaseGroup extends BasicGroup {
     return super.canAddRule();
   }
 
+  canAddReq() {
+    if (this.isDefaultCase())
+      return false;
+    return super.canAddReq();
+  }
+
   renderValue() {
     const { config, isLocked, value, setValue, id } = this.props;
     const { immutableValuesMode } = config.settings;
@@ -156,12 +162,14 @@ class CaseGroup extends BasicGroup {
   }
 
   renderActions() {
-    const {config, addGroup, addRule, isLocked, isTrueLocked, id} = this.props;
+    const {config, addGroup, addRule, addReq, isLocked, isTrueLocked, id} = this.props;
     return <GroupActions
       config={config}
       addGroup={addGroup}
       addRule={addRule}
       canAddRule={this.canAddRule()}
+      addReq={addReq}
+      canAddReq={this.canAddReq()}
       canAddGroup={this.canAddGroup()}
       canDeleteGroup={this.canDeleteGroup()}
       removeSelf={this.removeSelf}

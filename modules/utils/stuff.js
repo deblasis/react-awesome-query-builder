@@ -11,8 +11,8 @@ export const defaultValue = (value, _default) => {
 export const truncateString = (str, n, useWordBoundary) => {
   if (!n || str.length <= n) { return str; }
   var subString = str.substr(0, n-1);
-  return (useWordBoundary 
-    ? subString.substr(0, subString.lastIndexOf(" ")) 
+  return (useWordBoundary
+    ? subString.substr(0, subString.lastIndexOf(" "))
     : subString) + "...";
 };
 
@@ -20,6 +20,9 @@ export const immutableEqual = function(v1, v2) {
   if (v1 === v2) {
     return true;
   } else {
+    if (typeof v1 === "undefined") {
+      return typeof v2 === "undefined";
+    }
     return v1.equals(v2);
   }
 };
@@ -127,7 +130,7 @@ export const listValuesToArray = (listValuesObj) => {
     return listValuesObj;
   if (Array.isArray(listValuesObj))
     return listValuesObj.map(v => listValue(v));
-  
+
   let listValuesArr = [];
   for (let v in listValuesObj) {
     const title = listValuesObj[v];
@@ -220,7 +223,7 @@ export const flatizeTreeData = (treeData) => {
       _flatize(c, treeData, 1);
     }
   }
-  
+
   return treeData;
 };
 
@@ -347,7 +350,7 @@ export function mergeArraysSmart(arr1, arr2) {
 const isDev = () => (process && process.env && process.env.NODE_ENV == "development");
 
 export const getLogger = (devMode = false) => {
-  const verbose = devMode != undefined ? devMode : isDev(); 
+  const verbose = devMode != undefined ? devMode : isDev();
   return verbose ? console : {
     error: () => {},
     log: () => {},

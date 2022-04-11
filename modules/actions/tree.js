@@ -45,6 +45,31 @@ export const removeRule = (config, path) => ({
  * @param {Immutable.List} path
  * @param {Immutable.Map} properties
  */
+export const addReq = (config, path, properties, ruleType = "req", children = null) => ({
+  type: constants.ADD_REQ,
+  ruleType: ruleType,
+  children: children,
+  path: toImmutableList(path),
+  id: uuid(),
+  properties: defaultRuleProperties(config).merge(properties || {}),
+  config: config
+});
+
+/**
+ * @param {object} config
+ * @param {Immutable.List} path
+ */
+export const removeReq = (config, path) => ({
+  type: constants.REMOVE_REQ,
+  path: toImmutableList(path),
+  config: config
+});
+
+/**
+ * @param {object} config
+ * @param {Immutable.List} path
+ * @param {Immutable.Map} properties
+ */
 export const addDefaultCaseGroup = (config, path, properties, children = null) => ({
   type: constants.ADD_CASE_GROUP,
   path: toImmutableList(path),

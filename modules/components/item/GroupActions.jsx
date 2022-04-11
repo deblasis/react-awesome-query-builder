@@ -14,23 +14,26 @@ const defaultPosition = "topRight";
 export class GroupActions extends PureComponent {
   render() {
     const {
-      config, 
-      addRule, addGroup, removeSelf, setLock, isLocked, isTrueLocked, id,
-      canAddGroup, canAddRule, canDeleteGroup
+      config,
+      addRule, addReq, addGroup, removeSelf, setLock, isLocked, isTrueLocked, id,
+      canAddGroup, canAddRule, canAddReq, canDeleteGroup
     } = this.props;
     const {
-      immutableGroupsMode, addRuleLabel, addGroupLabel, delGroupLabel, groupActionsPosition, 
+      immutableGroupsMode, addRuleLabel, addReqLabel, addGroupLabel, delGroupLabel, groupActionsPosition,
       renderButton: Btn, renderSwitch: Switch, renderButtonGroup: BtnGrp,
       lockLabel, lockedLabel, showLock, canDeleteLocked,
     } = config.settings;
     const position = groupActionsPositionList[groupActionsPosition || defaultPosition];
 
-    const setLockSwitch = showLock && !(isLocked && !isTrueLocked) && <Switch 
+    const setLockSwitch = showLock && !(isLocked && !isTrueLocked) && <Switch
       type="lock" id={id} value={isLocked} setValue={setLock} label={lockLabel} checkedLabel={lockedLabel} config={config}
     />;
 
     const addRuleBtn = !immutableGroupsMode && canAddRule && !isLocked && <Btn
       type="addRule" onClick={addRule} label={addRuleLabel} readonly={isLocked} config={config}
+    />;
+    const addReqBtn = !immutableGroupsMode && canAddReq && !isLocked && <Btn
+      type="addRule" onClick={addReq} label={addReqLabel} readonly={isLocked} config={config}
     />;
     const addGroupBtn = !immutableGroupsMode && canAddGroup && !isLocked && <Btn
       type="addGroup" onClick={addGroup} label={addGroupLabel} readonly={isLocked} config={config}
@@ -43,6 +46,7 @@ export class GroupActions extends PureComponent {
       <div className={`group--actions ${position}`}>
         <BtnGrp config={config}>
           {setLockSwitch}
+          {addReqBtn}
           {addRuleBtn}
           {addGroupBtn}
           {delGroupBtn}

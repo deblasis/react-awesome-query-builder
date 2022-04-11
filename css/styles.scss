@@ -38,6 +38,16 @@
   }
 }
 
+.requirement-expression {
+  margin:10px;
+  background-color: #91ccff;
+  border-radius: 10px;
+
+  & > span.title {
+    font-weight: bold;
+    padding: 10px;
+  }
+}
 
 /******************************************************************************/
 /** COMMON ********************************************************************/
@@ -177,7 +187,7 @@ ul.ant-select-selection__rendered {
         width: 14px;
         height: calc(50% + 8px);
         border-color: #CCC;
-        border-style: solid;    
+        border-style: solid;
         -webkit-box-sizing: border-box;
         -moz-box-sizing: border-box;
         box-sizing: border-box;
@@ -313,7 +323,7 @@ ul.ant-select-selection__rendered {
     margin-top: 0 !important;
     margin-bottom: 0 !important;
   }
-  
+
   .case_group--value {
     margin-top: 0;
     margin-bottom: 0;
@@ -400,10 +410,10 @@ ul.ant-select-selection__rendered {
   margin-right: 8px;
 }
 
-$rule_items: ".rule--field", ".group--field", ".rule--operator", ".rule--value", ".rule--operator-options", ".rule--widget", 
+$rule_items: ".rule--field", ".group--field", ".rule--operator", ".rule--value", ".rule--operator-options", ".rule--widget",
  ".widget--widget", ".widget--valuesrc", ".widget--sep", ".operator--options--sep",
  ".rule--before-widget", ".rule--after-widget";
- 
+
 $seps: ".widget--sep", ".operator--options--sep", ".rule--func--bracket-before", ".rule--func--bracket-after", ".rule--func--arg-sep";
 
 #{$rule_items} {
@@ -508,7 +518,7 @@ div.tooltip-inner {
 /** FUNC **********************************************************************/
 /******************************************************************************/
 
-$rule_func_items: ".rule--func--wrapper", ".rule--func", ".rule--func--args", ".rule--func--arg", ".rule--func--arg-value", 
+$rule_func_items: ".rule--func--wrapper", ".rule--func", ".rule--func--args", ".rule--func--arg", ".rule--func--arg-value",
  ".rule--func--bracket-before", ".rule--func--bracket-after", ".rule--func--arg-sep",
  ".rule--func--arg-label", ".rule--func--arg-label-sep";
 
@@ -605,9 +615,9 @@ $rule_actions: ".widget--valuesrc", ".rule--drag-handler", ".rule--header";
 
 
 .qb-lite {
-  @include visible_only_for_hovered_group($group_actions);
-  @include display_only_for_hovered_group($inactive_conjs, $active_conjs);
-  @include show_only_for_hovered_rule($rule_actions);
+  // @include visible_only_for_hovered_group($group_actions);
+  // @include display_only_for_hovered_group($inactive_conjs, $active_conjs);
+  // @include show_only_for_hovered_rule($rule_actions);
 
   &.qb-dragging {
     @include force_unvisible(#{$rule_actions, $group_actions});

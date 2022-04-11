@@ -7,7 +7,7 @@ import {connect} from "react-redux";
 import {defaultGroupConjunction} from "../../utils/defaultUtils";
 
 
-const createGroupContainer = (Group) => 
+const createGroupContainer = (Group) =>
   class GroupContainer extends Component {
     static propTypes = {
       //tree: PropTypes.instanceOf(Immutable.Map).isRequired,
@@ -124,6 +124,10 @@ const createGroupContainer = (Group) =>
       this.props.actions.addRule(this.props.path);
     };
 
+    addReq = () => {
+      this.props.actions.addReq(this.props.path, {field:"reqId" , operator: "select_equals", valueSrc: ["value"]});
+    };
+
     // for RuleGroup
     setField = (field) => {
       this.props.actions.setField(this.props.path, field);
@@ -174,6 +178,7 @@ const createGroupContainer = (Group) =>
               addCaseGroup={this.dummyFn}
               addDefaultCaseGroup={this.dummyFn}
               addRule={this.dummyFn}
+              addReq={this.dummyFn}
               setField={this.dummyFn}
               setOperator={this.dummyFn}
               setValue={this.dummyFn}
@@ -212,6 +217,7 @@ const createGroupContainer = (Group) =>
               addCaseGroup={isInDraggingTempo ? this.dummyFn : this.addCaseGroup}
               addDefaultCaseGroup={isInDraggingTempo ? this.dummyFn : this.addDefaultCaseGroup}
               addRule={isInDraggingTempo ? this.dummyFn : this.addRule}
+              addReq={isInDraggingTempo ? this.dummyFn : this.addReq}
               setField={isInDraggingTempo ? this.dummyFn : this.setField}
               setOperator={isInDraggingTempo ? this.dummyFn : this.setOperator}
               setValue={isInDraggingTempo ? this.dummyFn : this.setValue}

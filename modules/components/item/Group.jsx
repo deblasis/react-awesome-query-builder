@@ -33,6 +33,7 @@ export class BasicGroup extends PureComponent {
     handleDraggerMouseDown: PropTypes.func,
     onDragStart: PropTypes.func,
     addRule: PropTypes.func.isRequired,
+    addReq: PropTypes.func.isRequired,
     addGroup: PropTypes.func.isRequired,
     removeSelf: PropTypes.func.isRequired,
     setConjunction: PropTypes.func.isRequired,
@@ -184,14 +185,16 @@ export class BasicGroup extends PureComponent {
   };
 
   renderActions() {
-    const {config, addRule, addGroup, isLocked, isTrueLocked, id} = this.props;
+    const {config, addRule, addReq, addGroup, isLocked, isTrueLocked, id} = this.props;
 
     return <GroupActions
       config={config}
       addRule={addRule}
+      addReq={addReq}
       addGroup={addGroup}
       canAddGroup={this.canAddGroup()}
       canAddRule={this.canAddRule()}
+      canAddReq={this.canAddReq()}
       canDeleteGroup={this.canDeleteGroup()}
       removeSelf={this.removeSelf}
       setLock={this.setLock}
@@ -205,11 +208,15 @@ export class BasicGroup extends PureComponent {
     return this.props.allowFurtherNesting;
   }
   canAddRule() {
-    const maxNumberOfRules = this.props.config.settings.maxNumberOfRules;
-    const totalRulesCnt = this.props.totalRulesCnt;
-    if (maxNumberOfRules) {
-      return totalRulesCnt < maxNumberOfRules;
-    }
+    return false;
+    // const maxNumberOfRules = this.props.config.settings.maxNumberOfRules;
+    // const totalRulesCnt = this.props.totalRulesCnt;
+    // if (maxNumberOfRules) {
+    //   return totalRulesCnt < maxNumberOfRules;
+    // }
+    // return true;
+  }
+  canAddReq() {
     return true;
   }
   canDeleteGroup() {
@@ -226,7 +233,7 @@ export class BasicGroup extends PureComponent {
     const {config, actions, onDragStart, isLocked} = props;
     const isRuleGroup = item.get("type") == "group" && item.getIn(["properties", "field"]) != null;
     const type = isRuleGroup ? "rule_group" : item.get("type");
-    
+
     return (
       <Item
         {...this.extraPropsForItem(item)}

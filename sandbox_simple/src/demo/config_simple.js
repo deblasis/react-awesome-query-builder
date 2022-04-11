@@ -138,11 +138,11 @@ const fields = {
       treeExpandAll: true,
       listValues: [
         { value: "1", title: "Warm colors", children: [
-          { value: "2", title: "Red" }, 
+          { value: "2", title: "Red" },
           { value: "3", title: "Orange" }
         ] },
         { value: "4", title: "Cool colors", children: [
-          { value: "5", title: "Green" }, 
+          { value: "5", title: "Green" },
           { value: "6", title: "Blue", children: [
             { value: "7", title: "Sub blue", children: [
               { value: "8", title: "Sub sub blue and a long text" }
@@ -159,11 +159,11 @@ const fields = {
       treeExpandAll: true,
       listValues: [
         { value: "1", title: "Warm colors", children: [
-          { value: "2", title: "Red" }, 
+          { value: "2", title: "Red" },
           { value: "3", title: "Orange" }
         ] },
         { value: "4", title: "Cool colors", children: [
-          { value: "5", title: "Green" }, 
+          { value: "5", title: "Green" },
           { value: "6", title: "Blue", children: [
             { value: "7", title: "Sub blue", children: [
               { value: "8", title: "Sub sub blue and a long text" }
@@ -262,7 +262,7 @@ const types = {
 
 const localeSettings = {
   locale: {
-    moment: "ru",
+    moment: "en",
   },
   valueLabel: "Value",
   valuePlaceholder: "Value",
@@ -312,7 +312,7 @@ const settings = {
   // showLabels: true,
   maxNesting: 3,
   canLeaveEmptyGroup: true, //after deletion
-    
+
   // renderField: (props) => <FieldCascader {...props} />,
   // renderOperator: (props) => <FieldDropdown {...props} />,
   // renderFunc: (props) => <FieldSelect {...props} />,

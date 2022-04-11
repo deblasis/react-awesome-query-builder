@@ -3,8 +3,8 @@ import React, { PureComponent } from "react";
 export class RuleGroupExtActions extends PureComponent {
   render() {
     const {
-      config, 
-      addRule, canAddRule, canDeleteGroup, removeSelf, 
+      config,
+      addRule, canAddRule, canDeleteGroup, removeSelf,
       setLock, isLocked, isTrueLocked, id,
     } = this.props;
     const {
@@ -13,15 +13,15 @@ export class RuleGroupExtActions extends PureComponent {
       lockLabel, lockedLabel, showLock, canDeleteLocked,
     } = config.settings;
 
-    const setLockSwitch = showLock && !(isLocked && !isTrueLocked) && <Switch 
+    const setLockSwitch = showLock && !(isLocked && !isTrueLocked) && <Switch
       type="lock" id={id} value={isLocked} setValue={setLock} label={lockLabel} checkedLabel={lockedLabel} config={config}
     />;
 
-    const addRuleBtn = !immutableGroupsMode && canAddRule && !isLocked && <Btn 
+    const addRuleBtn = !immutableGroupsMode && canAddRule && !isLocked && <Btn
       type="addRuleGroupExt" onClick={addRule} label={addSubRuleLabel} readonly={isLocked} config={config}
     />;
 
-    const delGroupBtn = !immutableGroupsMode && canDeleteGroup && (!isLocked || isLocked && canDeleteLocked) && <Btn 
+    const delGroupBtn = !immutableGroupsMode && canDeleteGroup && (!isLocked || isLocked && canDeleteLocked) && <Btn
       type="delRuleGroup" onClick={removeSelf} label={delGroupLabel} config={config}
     />;
 

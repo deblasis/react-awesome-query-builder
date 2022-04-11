@@ -30,12 +30,13 @@ class RuleGroup extends BasicGroup {
   }
 
   childrenClassName = () => "rule_group--children";
-  
+
   renderHeaderWrapper = () => null;
   renderFooterWrapper = () => null;
   renderConjs = () => null;
   canAddGroup = () => false;
   canAddRule = () => true;
+  canAddReq = () => true;
   canDeleteGroup = () => false;
 
   reordableNodesCntForItem(_item) {
@@ -73,11 +74,12 @@ class RuleGroup extends BasicGroup {
   }
 
   renderActions() {
-    const {config, addRule, isLocked, isTrueLocked, id} = this.props;
+    const {config, addRule, addReq, isLocked, isTrueLocked, id} = this.props;
 
     return <RuleGroupActions
       config={config}
       addRule={addRule}
+      addReq={addReq}
       canAddRule={this.canAddRule()}
       canDeleteGroup={this.canDeleteGroup()}
       removeSelf={this.removeSelf}

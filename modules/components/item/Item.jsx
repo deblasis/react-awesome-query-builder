@@ -6,9 +6,11 @@ import RuleGroup from "./RuleGroup";
 import RuleGroupExt from "./RuleGroupExt";
 import SwitchGroup from "./SwitchGroup";
 import CaseGroup from "./CaseGroup";
+import Requirement from "./Requirement";
 
 const types = [
   "rule",
+  "req",
   "group",
   "rule_group",
   "switch_group",
@@ -45,7 +47,7 @@ const typeMap = {
     />
   ),
   group: (props) => (
-    <Group 
+    <Group
       {...getProperties(props)}
       id={props.id}
       groupId={props.groupId}
@@ -63,7 +65,7 @@ const typeMap = {
     />
   ),
   rule_group: (props) => (
-    <RuleGroup 
+    <RuleGroup
       {...getProperties(props)}
       id={props.id}
       groupId={props.groupId}
@@ -80,8 +82,24 @@ const typeMap = {
       parentReordableNodesCnt={props.parentReordableNodesCnt}
     />
   ),
+  req: (props) => (
+    <Requirement
+      {...getProperties(props)}
+      id={props.id}
+      groupId={props.groupId}
+      path={props.path}
+      actions={props.actions}
+      reordableNodesCnt={props.reordableNodesCnt}
+      totalRulesCnt={props.totalRulesCnt}
+      config={props.config}
+      onDragStart={props.onDragStart}
+      isDraggingTempo={props.isDraggingTempo}
+      parentField={props.parentField}
+      parentReordableNodesCnt={props.parentReordableNodesCnt}
+    />
+  ),
   rule_group_ext: (props) => (
-    <RuleGroupExt 
+    <RuleGroupExt
       {...getProperties(props)}
       id={props.id}
       groupId={props.groupId}
@@ -99,7 +117,7 @@ const typeMap = {
     />
   ),
   switch_group: (props) => (
-    <SwitchGroup 
+    <SwitchGroup
       {...getProperties(props)}
       id={props.id}
       groupId={props.groupId}
@@ -117,7 +135,7 @@ const typeMap = {
     />
   ),
   case_group: (props) => (
-    <CaseGroup 
+    <CaseGroup
       {...getProperties(props)}
       id={props.id}
       groupId={props.groupId}

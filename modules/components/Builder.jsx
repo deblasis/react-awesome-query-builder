@@ -56,7 +56,7 @@ export default class Builder extends Component {
     const totalRulesCnt = isTernary ? null : getTotalRulesCountInTree(tree);
     const id = tree.get("id");
     return (
-      <Item 
+      <Item
         key={id}
         id={id}
         path={this.path}

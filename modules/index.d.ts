@@ -51,7 +51,7 @@ type RuleValue = boolean | number | string | Date | Array<string> | any;
 
 type ValueSource = "value" | "field" | "func" | "const";
 type RuleGroupMode = "struct" | "some" | "array";
-type ItemType = "group" | "rule_group" | "rule";
+type ItemType = "group" | "rule_group" | "rule" | "req";
 type ItemProperties = RuleProperties | RuleGroupExtProperties | RuleGroupProperties | GroupProperties;
 
 type TypedValueSourceMap<T> = {
@@ -229,6 +229,16 @@ export interface Config {
   settings: Settings,
   fields: Fields,
   funcs?: Funcs,
+  requirements?: {
+    values: {
+      title: string,
+      value: string,
+      name: string,
+      service: string,
+      description: string,
+    }[],
+    hasMore: boolean
+  },
 }
 
 /////////////////
@@ -271,6 +281,8 @@ export interface Actions {
   // tip: children will be converted to immutable ordered map in `_addChildren1`
   addRule(path: IdPath, properties?: ItemProperties, type?: ItemType, children?: Array<JsonAnyRule>): undefined;
   removeRule(path: IdPath): undefined;
+  addReq(path: IdPath, properties?: ItemProperties, type?: ItemType, children?: Array<JsonAnyRule>): undefined;
+  removeReq(path: IdPath): undefined;
   addGroup(path: IdPath, properties?: ItemProperties, children?: Array<JsonItem>): undefined;
   removeGroup(path: IdPath): undefined;
   setNot(path: IdPath, not: boolean): undefined;
@@ -408,7 +420,7 @@ export interface ConjunctionOption {
 }
 
 export interface ConjsProps {
-  id: string, 
+  id: string,
   readonly?: boolean,
   disabled?: boolean,
   selectedConjunction?: string,
@@ -427,8 +439,8 @@ export interface ConjsProps {
 /////////////////
 
 export interface ButtonProps {
-  type: "addRule" | "addGroup" | "delRule" | "delGroup"  | "addRuleGroup" | "delRuleGroup", 
-  onClick(): void, 
+  type: "addRule" | "addGroup" | "delRule" | "delGroup"  | "addRuleGroup" | "delRuleGroup",
+  onClick(): void,
   label: string,
   config?: Config,
   readonly?: boolean,
@@ -454,23 +466,23 @@ export interface ProviderProps {
 }
 
 export type ValueSourceItem = {
-  label: string, 
+  label: string,
 }
 type ValueSourcesItems = TypedValueSourceMap<ValueSourceItem>;
 
 export interface ValueSourcesProps {
   config?: Config,
-  valueSources: ValueSourcesItems, 
-  valueSrc?: ValueSource, 
-  setValueSrc(valueSrc: string): void, 
+  valueSources: ValueSourcesItems,
+  valueSrc?: ValueSource,
+  setValueSrc(valueSrc: string): void,
   readonly?: boolean,
   title: string,
 }
 
 export interface ConfirmModalProps {
-  onOk(): void, 
-  okText: string, 
-  cancelText?: string, 
+  onOk(): void,
+  okText: string,
+  cancelText?: string,
   title: string,
 }
 
@@ -706,12 +718,12 @@ export type Fields = TypedMap<FieldOrGroup>;
 /////////////////
 
 export type FieldItem = {
-  items?: FieldItems, 
-  key: string, 
+  items?: FieldItems,
+  key: string,
   path?: string, // field path with separator
-  label: string, 
-  fullLabel?: string, 
-  altLabel?: string, 
+  label: string,
+  fullLabel?: string,
+  altLabel?: string,
   tooltip?: string,
   disabled?: boolean,
 }

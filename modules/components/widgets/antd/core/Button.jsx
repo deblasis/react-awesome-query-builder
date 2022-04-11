@@ -5,8 +5,10 @@ import { PlusOutlined, PlusCircleOutlined, DeleteFilled } from "@ant-design/icon
 export default ({type, onClick, label, readonly, config: {settings}}) => {
   const typeToIcon = {
     "addRule": <PlusOutlined />,
+    "addReq": <PlusOutlined />,
     "addGroup": <PlusCircleOutlined />,
     "delRule": <DeleteFilled />, //?
+    "delRew": <DeleteFilled />, //?
     "delGroup": <DeleteFilled />,
     "delRuleGroup": <DeleteFilled />,
     "addRuleGroup": <PlusOutlined />,
@@ -14,8 +16,10 @@ export default ({type, onClick, label, readonly, config: {settings}}) => {
 
   const typeToClass = {
     "addRule": "action action--ADD-RULE",
+    "addReq": "action action--ADD-REQ",
     "addGroup": "action action--ADD-GROUP",
     "delRule": "action action--DELETE", //?
+    "delReq": "action action--DELETE", //?
     "delGroup": "action action--DELETE",
     "delRuleGroup": "action action--DELETE",
     "addRuleGroup": <PlusOutlined />,
@@ -23,6 +27,7 @@ export default ({type, onClick, label, readonly, config: {settings}}) => {
 
   const typeToType = {
     "delRule": "danger",
+    "delReq": "danger",
     "delGroup": "danger",
     "delRuleGroup": "danger",
   };
