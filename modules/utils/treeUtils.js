@@ -33,10 +33,16 @@ export const expandTreeSubpath = (path, ...suffix) =>
 export const getItemByPath = (tree, path) => {
   let children = new Immutable.OrderedMap({ [tree.get("id")] : tree });
   let res = tree;
-  path.forEach((id) => {
-    res = children.get(id);
-    children = res.get("children1");
-  });
+  try {
+    path.forEach((id) => {
+      res = children.get(id);
+      children = res.get("children1");
+    });
+  } catch (e) {
+    console.log(e);
+    console.log("path:", path);
+    console.log("res", res);
+  }
   return res;
 };
 
@@ -124,7 +130,7 @@ export const fixPathsInTree = (tree) => {
       if (children.constructor.name == "Map") {
         // protect: should me OrderedMap, not Map (issue #501)
         newTree = newTree.setIn(
-          expandTreePath(itemPath, "children1"), 
+          expandTreePath(itemPath, "children1"),
           new Immutable.OrderedMap(children)
         );
       }
@@ -221,7 +227,7 @@ export const getFlatTree = (tree) => {
       let subinfo = {};
       children.map((child, _childId) => {
         _flatizeTree(
-          child, path.concat(id), 
+          child, path.concat(id),
           insideCollapsed || collapsed, insideLocked || isLocked, insideRuleGroup || isRuleGroup,
           lev + 1, subinfo, type, type == "case_group" ? id : caseId
         );
@@ -230,7 +236,7 @@ export const getFlatTree = (tree) => {
         info.height = (info.height || 0) + (subinfo.height || 0);
       }
     }
-    
+
     if (caseId && isLeaf) {
       items[caseId].leafsCount++;
     }
@@ -238,7 +244,7 @@ export const getFlatTree = (tree) => {
     const itemsAfter = flat.length;
     const _bottom = realHeight;
     const height = info.height;
-        
+
     Object.assign(items[id], {
       _height: (itemsAfter - itemsBefore),
       height: height,
@@ -292,7 +298,7 @@ export const getTotalReordableNodesCountInTree = (tree) => {
   }
 
   _processNode(tree, [], 0);
-    
+
   return cnt - 1; // -1 for root
 };
 
@@ -317,7 +323,7 @@ export const getTotalRulesCountInTree = (tree) => {
       children = item.children1;
       type = item.type;
     }
-    
+
     if (type == "rule" || type == "rule_group") {
       // tip: count rule_group as 1 rule
       cnt++;
@@ -329,7 +335,7 @@ export const getTotalRulesCountInTree = (tree) => {
   }
 
   _processNode(tree, [], 0);
-    
+
   return cnt;
 };
 
@@ -353,7 +359,7 @@ export const getTreeBadFields = (tree) => {
 
   if (tree)
     _processNode(tree, [], 0);
-    
+
   return Array.from(new Set(badFields));
 };
 
