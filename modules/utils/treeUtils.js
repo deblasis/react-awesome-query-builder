@@ -40,7 +40,8 @@ export const getItemByPath = (tree, path) => {
     });
   } catch (e) {
     console.log(e);
-    console.log("path:", path);
+    console.log("children", children);
+    console.log("path", path);
     console.log("res", res);
   }
   return res;

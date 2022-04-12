@@ -801,7 +801,11 @@ export default (config) => {
     }
 
     case constants.MOVE_ITEM: {
-      set.tree = moveItem(state.tree, action.fromPath, action.toPath, action.placement, action.config);
+      try {
+        set.tree = moveItem(state.tree, action.fromPath, action.toPath, action.placement, action.config);
+      } catch (error) {
+        console.log("MOVE_ITEM error", error);
+      }
       break;
     }
 
